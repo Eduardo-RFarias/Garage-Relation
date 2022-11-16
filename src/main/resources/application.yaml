@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/garage_relation_java_dev?useTimezone=true&serverTimezone=UTC
+    username: sigma
+    password: sigma_dba
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: false
+    open-in-view: true
+springdoc:
+  paths-to-match: /api/**
+  swagger-ui:
+    use-root-path: true
+cors:
+  originPatterns: http://localhost:3000, http://localhost:8080
