@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ICarRepository extends JpaRepository<Car, Long> {
+public interface CarRepository extends JpaRepository<Car, Long> {
     @Query("FROM Car c WHERE c.brand LIKE CONCAT('%',:query,'%') OR c.model LIKE CONCAT('%',:query,'%')")
     List<Car> findByBrandOrModelContains(@Param("query") String query);
 }

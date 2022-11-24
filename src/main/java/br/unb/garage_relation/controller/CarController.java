@@ -1,12 +1,10 @@
 package br.unb.garage_relation.controller;
 
-import br.unb.garage_relation.exception.DatabaseOperationException;
-import br.unb.garage_relation.exception.RegisterNotFoundException;
 import br.unb.garage_relation.model.dto.request.CarCreateDTO;
 import br.unb.garage_relation.model.dto.request.CarPartialUpdateDTO;
 import br.unb.garage_relation.model.dto.request.CarUpdateDTO;
 import br.unb.garage_relation.model.dto.response.CarResponseDTO;
-import br.unb.garage_relation.service.interfaces.ICarService;
+import br.unb.garage_relation.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,9 +23,9 @@ import static org.springframework.hateoas.IanaLinkRelations.SELF;
 @RequestMapping("/api/v1/car")
 @Tag(name = "Car", description = "Endpoints for managing cars")
 public class CarController {
-    private final ICarService carService;
+    private final CarService carService;
 
-    public CarController(ICarService carService) {
+    public CarController(CarService carService) {
         this.carService = carService;
     }
 
@@ -44,7 +42,7 @@ public class CarController {
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             }
     )
-    public CollectionModel<EntityModel<CarResponseDTO>> list() {
+    public CollectionModel<EntityModel<CarResponseDTO>> findAll() {
         return carService.findAll();
     }
 
@@ -63,12 +61,8 @@ public class CarController {
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
             }
     )
-    public ResponseEntity<EntityModel<CarResponseDTO>> findById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(carService.findById(id));
-        } catch (RegisterNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public EntityModel<CarResponseDTO> findById(@PathVariable Long id) {
+        return carService.findById(id);
     }
 
     @PostMapping(
@@ -87,14 +81,10 @@ public class CarController {
             }
     )
     public ResponseEntity<EntityModel<CarResponseDTO>> create(@RequestBody @Valid CarCreateDTO carCreateDTO) {
-        try {
-            var carCreated = carService.create(carCreateDTO);
-            var location = carCreated.getRequiredLink(SELF).toUri();
+        var carCreated = carService.create(carCreateDTO);
+        var location = carCreated.getRequiredLink(SELF).toUri();
 
-            return ResponseEntity.created(location).body(carCreated);
-        } catch (DatabaseOperationException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.created(location).body(carCreated);
     }
 
     @PutMapping(
@@ -114,15 +104,8 @@ public class CarController {
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
             }
     )
-    public ResponseEntity<EntityModel<CarResponseDTO>> update(@PathVariable Long id, @RequestBody @Valid CarUpdateDTO carUpdateDTO) {
-        try {
-            var carUpdated = carService.update(id, carUpdateDTO);
-            return ResponseEntity.ok(carUpdated);
-        } catch (RegisterNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (DatabaseOperationException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public EntityModel<CarResponseDTO> update(@PathVariable Long id, @RequestBody @Valid CarUpdateDTO carUpdateDTO) {
+        return carService.update(id, carUpdateDTO);
     }
 
     @PatchMapping(
@@ -142,15 +125,8 @@ public class CarController {
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
             }
     )
-    public ResponseEntity<EntityModel<CarResponseDTO>> partialUpdate(@PathVariable Long id, @RequestBody @Valid CarPartialUpdateDTO carPartialUpdateDTO) {
-        try {
-            var carUpdated = carService.partialUpdate(id, carPartialUpdateDTO);
-            return ResponseEntity.ok(carUpdated);
-        } catch (RegisterNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (DatabaseOperationException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public EntityModel<CarResponseDTO> partialUpdate(@PathVariable Long id, @RequestBody @Valid CarPartialUpdateDTO carPartialUpdateDTO) {
+        return carService.partialUpdate(id, carPartialUpdateDTO);
     }
 
     @DeleteMapping(
@@ -169,13 +145,7 @@ public class CarController {
             }
     )
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
-            carService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (RegisterNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (DatabaseOperationException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        carService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

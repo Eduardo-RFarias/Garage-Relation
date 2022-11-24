@@ -10,11 +10,18 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-    show-sql: false
+    show-sql: true
     open-in-view: true
 springdoc:
-  paths-to-match: /api/**
+  paths-to-match:
+    - /api/**
+    - /auth/**
   swagger-ui:
     use-root-path: true
 cors:
   originPatterns: http://localhost:3000, http://localhost:8080
+security:
+  jwt:
+    secret-key: o(!u@&eh%z-jhfk#2-c=smy&iq-#3derv4oq_l9_wwc@h#xi5x
+    expiration: 1 hour
+    refresh-expiration: 30 days

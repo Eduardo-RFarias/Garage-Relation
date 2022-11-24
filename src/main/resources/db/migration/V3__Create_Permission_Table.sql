@@ -1,0 +1,6 @@
+CREATE TABLE permission
+(
+    name VARCHAR(50) NOT NULL,
+
+    CONSTRAINT PERMISSION_PK PRIMARY KEY (name)
+) ENGINE = InnoDB;

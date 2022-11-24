@@ -21,6 +21,10 @@ public class Car {
     @Column(nullable = false)
     private Integer year;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    private User owner;
+
     public Car(Long id, String model, String brand, Integer year) {
         this.id = id;
         this.model = model;
@@ -67,6 +71,14 @@ public class Car {
 
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     @Override

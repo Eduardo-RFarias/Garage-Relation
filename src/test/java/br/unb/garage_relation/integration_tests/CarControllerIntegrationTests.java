@@ -1,8 +1,7 @@
 package br.unb.garage_relation.integration_tests;
 
 import br.unb.garage_relation.model.Car;
-import br.unb.garage_relation.repository.ICarRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import br.unb.garage_relation.repository.CarRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +18,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @ActiveProfiles("test")
 public class CarControllerIntegrationTests {
     @Autowired
-    private ICarRepository carRepository;
+    private CarRepository carRepository;
 
     @Test
     public void findAllCars__withTwoCars__shouldReturn200WithTwoCars() {
@@ -35,6 +34,8 @@ public class CarControllerIntegrationTests {
         var response = given()
                 .basePath("/api/v1/car")
                 .port(TEST_SERVER_PORT)
+                .auth()
+                .basic("user", "password")
                 .when()
                 .get();
 

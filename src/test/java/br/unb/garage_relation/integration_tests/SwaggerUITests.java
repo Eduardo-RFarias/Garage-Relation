@@ -18,6 +18,8 @@ public class SwaggerUITests {
         var response = given()
                 .basePath("/swagger-ui/index.html")
                 .port(TEST_SERVER_PORT)
+                .auth()
+                .basic("user", "password")
                 .when()
                 .get();
 

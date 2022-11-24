@@ -1,4 +1,7 @@
 spring:
+  security:
+    user:
+      password: password
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/garage_relation_java_test?useTimezone=true&serverTimezone=UTC
@@ -6,7 +9,7 @@ spring:
     password: sigma_dba
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -15,10 +18,17 @@ spring:
   flyway:
     enabled: false
 springdoc:
-  paths-to-match: /api/**
+  paths-to-match:
+    - /api/**
+    - /auth/**
   swagger-ui:
     use-root-path: true
 server:
   port: 8888
 cors:
   originPatterns: http://localhost:3000, http://localhost:8080
+security:
+  jwt:
+    secret-key: o(!u@&eh%z-jhfk#2-c=smy&iq-#3derv4oq_l9_wwc@h#xi5x
+    expiration: 1 hour
+    refresh-expiration: 1 hour

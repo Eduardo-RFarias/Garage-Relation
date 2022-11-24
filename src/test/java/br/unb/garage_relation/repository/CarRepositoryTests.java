@@ -9,12 +9,13 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = DEFINED_PORT)
 @ActiveProfiles("test")
-public class ICarRepositoryTests {
+public class CarRepositoryTests {
     @Autowired
-    private ICarRepository carRepository;
+    private CarRepository carRepository;
 
     @Test
     public void findByBrandOrModelContains__withSomeCars__returns4Cars() {

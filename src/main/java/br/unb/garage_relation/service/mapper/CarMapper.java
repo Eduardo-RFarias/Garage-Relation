@@ -6,7 +6,6 @@ import br.unb.garage_relation.model.dto.request.CarCreateDTO;
 import br.unb.garage_relation.model.dto.request.CarPartialUpdateDTO;
 import br.unb.garage_relation.model.dto.request.CarUpdateDTO;
 import br.unb.garage_relation.model.dto.response.CarResponseDTO;
-import br.unb.garage_relation.service.mapper.interfaces.ICarMapper;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-public class CarMapper implements ICarMapper {
-    @Override
+public class CarMapper {
     public CarResponseDTO toCarResponseDTO(Car car) {
         return new CarResponseDTO(
                 car.getId(),
@@ -28,7 +26,6 @@ public class CarMapper implements ICarMapper {
         );
     }
 
-    @Override
     public Car toCar(CarCreateDTO carCreateDTO) {
         return new Car(
                 carCreateDTO.model(),
@@ -37,7 +34,6 @@ public class CarMapper implements ICarMapper {
         );
     }
 
-    @Override
     public Car updateCar(Car car, CarUpdateDTO carUpdateDTO) {
         car.setModel(carUpdateDTO.model());
         car.setBrand(carUpdateDTO.brand());
@@ -46,7 +42,6 @@ public class CarMapper implements ICarMapper {
         return car;
     }
 
-    @Override
     public Car updateCar(Car car, CarPartialUpdateDTO carPartialUpdateDTO) {
         if (carPartialUpdateDTO.model() != null) {
             car.setModel(carPartialUpdateDTO.model());
@@ -63,7 +58,6 @@ public class CarMapper implements ICarMapper {
         return car;
     }
 
-    @Override
     public EntityModel<CarResponseDTO> toModel(Car entity) {
         var dto = toCarResponseDTO(entity);
 
@@ -74,7 +68,6 @@ public class CarMapper implements ICarMapper {
         return model;
     }
 
-    @Override
     public CollectionModel<EntityModel<CarResponseDTO>> toCollectionModel(Iterable<? extends Car> entities) {
         var models = new ArrayList<EntityModel<CarResponseDTO>>();
 
@@ -82,7 +75,7 @@ public class CarMapper implements ICarMapper {
             models.add(toModel(entity));
         }
 
-        var selfLink = linkTo(methodOn(CarController.class).list()).withSelfRel();
+        var selfLink = linkTo(methodOn(CarController.class).findAll()).withSelfRel();
 
         return CollectionModel.of(models, selfLink);
     }

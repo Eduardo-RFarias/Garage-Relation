@@ -1,13 +1,12 @@
 package br.unb.garage_relation.service;
 
-import br.unb.garage_relation.exception.ApplicationException;
 import br.unb.garage_relation.exception.DatabaseOperationException;
 import br.unb.garage_relation.exception.RegisterNotFoundException;
 import br.unb.garage_relation.model.Car;
 import br.unb.garage_relation.model.dto.request.CarCreateDTO;
 import br.unb.garage_relation.model.dto.request.CarPartialUpdateDTO;
 import br.unb.garage_relation.model.dto.request.CarUpdateDTO;
-import br.unb.garage_relation.repository.ICarRepository;
+import br.unb.garage_relation.repository.CarRepository;
 import br.unb.garage_relation.service.mapper.CarMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,15 +24,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = DEFINED_PORT)
 @ActiveProfiles("test")
 public class CarServiceTests {
     @Spy
     private CarMapper carMapper;
 
     @Mock
-    private ICarRepository carRepository;
+    private CarRepository carRepository;
 
     @InjectMocks
     private CarService carService;
@@ -133,7 +133,7 @@ public class CarServiceTests {
         // Act and Assert
         assertThatThrownBy(
                 () -> carService.create(carCreateDto)
-        ).isInstanceOf(ApplicationException.class);
+        ).isInstanceOf(DatabaseOperationException.class);
     }
 
     @Test
