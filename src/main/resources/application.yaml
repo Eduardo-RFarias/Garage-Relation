@@ -2,15 +2,15 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/garage_relation_java_dev?useTimezone=true&serverTimezone=UTC
-    username: sigma
-    password: sigma_dba
+    username: root
+    password: password
   jpa:
     hibernate:
       ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-    show-sql: true
+    show-sql: false
     open-in-view: true
 springdoc:
   paths-to-match:
@@ -22,6 +22,8 @@ cors:
   originPatterns: http://localhost:3000, http://localhost:8080
 security:
   jwt:
-    secret-key: o(!u@&eh%z-jhfk#2-c=smy&iq-#3derv4oq_l9_wwc@h#xi5x
-    expiration: 1 hour
-    refresh-expiration: 30 days
+    private-key: classpath:app.key
+    public-key: classpath:app.pub
+    validity:
+      access: 1 day
+      refresh: 30 days

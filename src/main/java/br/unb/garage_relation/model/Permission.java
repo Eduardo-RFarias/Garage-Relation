@@ -15,7 +15,7 @@ public class Permission implements GrantedAuthority {
     @Column(length = 50)
     private String name;
 
-    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
     private final Set<User> users = new HashSet<>();
 
     public Permission() {
